@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.thewizrd.touchlockhelper"
-        minSdkVersion 23
+        minSdk 24
         targetSdkVersion 30
         versionCode 3010000
         versionName "1.0.0"

@@ -12,31 +12,35 @@ class MainActivity : Activity() {
     }
 
     private lateinit var binding: ActivityMainBinding
-    private var mAutoLaunched = false
+    private var isAutoLaunched = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupViews()
+        setupListeners()
+    }
 
+    private fun setupViews() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.touchlockPrefSwitch.isChecked = Settings.isAutoLaunchTouchLockEnabled(this)
+    }
 
+    private fun setupListeners() {
         binding.launchTouchlockPref.setOnClickListener {
             startWetMode()
         }
 
-        binding.touchlockPrefSwitch.isChecked = Settings.isAutoLaunchTouchLockEnabled(this)
-        binding.touchlockPrefSwitch.setOnClickListener {
-            val state = !Settings.isAutoLaunchTouchLockEnabled(this)
-            Settings.setAutoLaunchTouchLockEnabled(this, state)
-            binding.touchlockPrefSwitch.isChecked = state
+        binding.touchlockPrefSwitch.setOnCheckedChangeListener { _, isChecked ->
+            Settings.setAutoLaunchTouchLockEnabled(this, isChecked)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (Settings.isAutoLaunchTouchLockEnabled(this) && !mAutoLaunched) {
+        if (Settings.isAutoLaunchTouchLockEnabled(this) && !isAutoLaunched) {
             startWetMode()
-            mAutoLaunched = true
+            isAutoLaunched = true
         }
     }
 
